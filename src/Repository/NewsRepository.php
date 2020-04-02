@@ -23,12 +23,17 @@ class NewsRepository extends ServiceEntityRepository
      */
 
     public function findByTitleDateCategory($title, $publishedAt, $category) {
-        $query = $this->getEntityManager()->createQuery('SELECT * FROM AppEntity:News n WHERE n.title=:title and 
-        n.publishedAt=:publishedAt and n.category=:category')->setParameter('title',$title)
-        ->setParameter('publishedAt',$publishedAt)->setParameter('category',$category);
+       
+        $result = $this->getEntityManager()->createQueryBuilder('n')->select('n.title')
+        ->from("App\Entity\News","n")->where("n.title=:title")->andWhere("n.publishedAt=:publishedAt")
+        ->andWhere("n.category=:category")->setParameters(array("title"=>$title,"publishedAt"=>$publishedAt,"category"=>$category))
+        ->getQuery()->getResult();
 
-        $result = $query->getResult();
         
+    }
+
+    public function findAll() {
+        return [];
     }
 
     

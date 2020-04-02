@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints\DateTime;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
  */
@@ -41,8 +41,8 @@ class News
      */
     private $publishedAt;
 
-    /**
-     * @ORM\Column(type="category")
+     /**
+     * @ORM\Column(type="text")
      */
     private $category;
 
@@ -99,12 +99,12 @@ class News
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTimeInterface
+    public function getPublishedAt(): ?\DateTime
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(\DateTimeInterface $publishedAt): self
+    public function setPublishedAt(\DateTime $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
 

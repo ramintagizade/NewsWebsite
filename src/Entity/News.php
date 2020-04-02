@@ -41,6 +41,11 @@ class News
      */
     private $publishedAt;
 
+    /**
+     * @ORM\Column(type="category")
+     */
+    private $category;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,5 +109,14 @@ class News
         $this->publishedAt = $publishedAt;
 
         return $this;
+    }
+
+    public function setCategory(string $category) : self {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function getCategory(): ?string {
+        return $this->category;
     }
 }

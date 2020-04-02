@@ -43,7 +43,7 @@ class FetchDataController extends AbstractController {
             $totalResults = $content->totalResults;
             $pages = ceil($totalResults/20);
             
-            
+
         
 
             for($i=2;$i<=$pages;$i++) {
@@ -64,6 +64,7 @@ class FetchDataController extends AbstractController {
         $len = count($articles);
         for($i=0;$i<$len;$i++) {
             // then call the mysql db to store the data 
+            
         }
     }
 

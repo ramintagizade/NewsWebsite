@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\News;
 use Symfony\Component\Validator\Constraints\DateTime;
-
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class FetchDataController extends AbstractController {
     /**
@@ -53,21 +53,37 @@ class FetchDataController extends AbstractController {
 
             $len = count($articles);
 
-            $manager = $this->getDoctrine()->getManager();
             
     
             //id, title, description, url, urlToImage, publishedAt
 
             for($i=0;$i<$len;$i++) {
-                $news = new News;
-                $news->setTitle($articles[$i]->title);
-                $news->setDescription($articles[$i]->description);
-                $news->setUrl($articles[$i]->url);
-                $news->setUrlToImage($articles[$i]->urlToImage);
-                $news->setPublishedAt(new \DateTime($articles[$i]->publishedAt));
-                $news->setCategory($articles[$i]->category);
-                $manager->persist($news);
-                $manager->flush();
+                $news = new News();
+                $title = $articles[$i]->title;
+                $description = $articles[$i]->description;
+                $url = $articles[$i]->url;
+                $urlToImage = $articles[$i]->urlToImage;
+                $publishedAt = new \DateTime($articles[$i]->publishedAt);
+                
+                if ($title == NULL || $description == NULL || $url == NULL || $urlToImage==NULL || $publishedAt==NULL) {
+                    continue;
+                }
+
+                $news->setTitle($title);
+                $news->setDescription($description);
+                $news->setUrl($url);
+                $news->setUrlToImage($urlToImage);
+                $news->setPublishedAt($publishedAt);
+                $news->setCategory($categories[0]);
+                $manager = $this->getDoctrine()->getManager();
+                try {
+                    $manager->persist($news);
+                    $manager->flush();
+                }
+                catch (UniqueConstraintViolationException  $e){
+                    $manager = $this->getDoctrine()->resetManager();
+                    $logger->error($e);
+                }
             }
             // $title, $publishedAt, $category
             $this->entityManager = $this->getDoctrine()->getManager();
@@ -78,7 +94,7 @@ class FetchDataController extends AbstractController {
                 $content = $this->sendRequest($i);
                 $content = json_decode($content);
                 $articles = $content->articles;
-
+                
             }
 
             return new Response("OK", Response::HTTP_OK);

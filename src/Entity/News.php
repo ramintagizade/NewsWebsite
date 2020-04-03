@@ -41,7 +41,7 @@ class News
      */
     private $publishedAt;
 
-     /**
+    /**
      * @ORM\Column(type="text")
      */
     private $category;
@@ -99,24 +99,27 @@ class News
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTime
+    public function getPublishedAt(): ?\DateTimeInterface
     {
         return $this->publishedAt;
     }
 
-    public function setPublishedAt(\DateTime $publishedAt): self
+    public function setPublishedAt(\DateTimeInterface $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
 
         return $this;
     }
 
-    public function setCategory(string $category) : self {
-        $this->category = $category;
-        return $this;
+    public function getCategory(): ?string
+    {
+        return $this->category;
     }
 
-    public function getCategory(): ?string {
-        return $this->category;
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 }

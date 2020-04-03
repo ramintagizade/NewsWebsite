@@ -28,8 +28,6 @@ class NewsRepository extends ServiceEntityRepository
         ->from("App\Entity\News","n")->where("n.title=:title")->andWhere("n.publishedAt=:publishedAt")
         ->andWhere("n.category=:category")->setParameters(array("title"=>$title,"publishedAt"=>$publishedAt,"category"=>$category))
         ->getQuery()->getResult();
-
-        
     }
 
     public function findAll() {

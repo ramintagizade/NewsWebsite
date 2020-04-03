@@ -98,6 +98,15 @@ class FetchDataController extends AbstractController {
                 //$manager->getConnection()->rollBack();
                    //$manager = $this->getDoctrine()->resetManager();
             }
+            catch (\DBALException $e) {
+                
+            } catch (\PDOException $e) {
+               
+            } catch (\ORMException $e) {
+                
+            } catch (\Exception $e) {
+                
+            }
         }
         try {
            $manager->flush();
@@ -105,6 +114,15 @@ class FetchDataController extends AbstractController {
         }
         catch (UniqueConstraintViolationException  $e){
             $manager = $this->getDoctrine()->resetManager();
+        }
+        catch (\DBALException $e) {
+                
+        } catch (\PDOException $e) {
+           
+        } catch (\ORMException $e) {
+            
+        } catch (\Exception $e) {
+            
         }
     }
 

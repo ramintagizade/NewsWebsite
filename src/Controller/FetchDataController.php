@@ -58,32 +58,7 @@ class FetchDataController extends AbstractController {
             //id, title, description, url, urlToImage, publishedAt
 
             for($i=0;$i<$len;$i++) {
-                $news = new News();
-                $title = $articles[$i]->title;
-                $description = $articles[$i]->description;
-                $url = $articles[$i]->url;
-                $urlToImage = $articles[$i]->urlToImage;
-                $publishedAt = new \DateTime($articles[$i]->publishedAt);
-                
-                if ($title == NULL || $description == NULL || $url == NULL || $urlToImage==NULL || $publishedAt==NULL) {
-                    continue;
-                }
-
-                $news->setTitle($title);
-                $news->setDescription($description);
-                $news->setUrl($url);
-                $news->setUrlToImage($urlToImage);
-                $news->setPublishedAt($publishedAt);
-                $news->setCategory($categories[0]);
-                $manager = $this->getDoctrine()->getManager();
-                try {
-                    $manager->persist($news);
-                    $manager->flush();
-                }
-                catch (UniqueConstraintViolationException  $e){
-                    $manager = $this->getDoctrine()->resetManager();
-                    $logger->error($e);
-                }
+                $this->saveByCategory($articles, $categories[0]);
             }
             // $title, $publishedAt, $category
             $this->entityManager = $this->getDoctrine()->getManager();
@@ -94,7 +69,12 @@ class FetchDataController extends AbstractController {
                 $content = $this->sendRequest($i);
                 $content = json_decode($content);
                 $articles = $content->articles;
-                
+
+                $len = count($articles);
+                for ($j=0;$j<$len;$j++) {
+
+                }
+
             }
 
             return new Response("OK", Response::HTTP_OK);
@@ -107,7 +87,34 @@ class FetchDataController extends AbstractController {
     public function saveByCategory($articles , $category) {
         $len = count($articles);
         for($i=0;$i<$len;$i++) {
-            // then call the mysql db to store the data 
+            $news = new News();
+            $title = $articles[$i]->title;
+            $description = $articles[$i]->description;
+            $url = $articles[$i]->url;
+            $urlToImage = $articles[$i]->urlToImage;
+            $publishedAt = new \DateTime($articles[$i]->publishedAt);
+                
+            if ($title == NULL || $description == NULL || $url == NULL || $urlToImage==NULL || $publishedAt==NULL) {
+                continue;
+            }
+
+            $news->setTitle($title);
+            $news->setDescription($description);
+            $news->setUrl($url);
+            $news->setUrlToImage($urlToImage);
+            $news->setPublishedAt($publishedAt);
+            $news->setCategory($category);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->getConnection()->beginTransaction();
+            try {
+                $manager->persist($news);
+                $manager->flush();
+                $manager->getConnection()->commit();
+            }
+            catch (UniqueConstraintViolationException  $e){
+                $manager->getConnection()->rollBack();
+                $manager = $this->getDoctrine()->resetManager();
+            }
 
         }
     }

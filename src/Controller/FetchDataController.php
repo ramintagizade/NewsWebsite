@@ -22,57 +22,55 @@ class FetchDataController extends AbstractController {
     /**
      * @Route("/fetchData" , name="fetch")
      */
-    public function fetch() : Response {
+    public function fetch() {
 
         $logger = new Logger("FetchData");
         
         if ($this->isDataLoading()) {
             return new Response("InProgress", Response::HTTP_OK);  
         }
-
-        $logger->info("received a request");
-
-        $next_page = 1;
-        $httpClient = HttpClient::create();
         $categories = ["general", "business", "entertainment","health","science","sports","technology"];
-        // loop through the categories array and fetch for each category 
-        print ("sending request ..." ); 
-        $response = $httpClient->request('GET', 'https://newsapi.org/v2/top-headlines?page='.$next_page.'&country=us&category=general&apiKey=d60756acb1ff49248d829c1635cca29e');
-
-        $statusCode = $response->getStatusCode();
-       
-
-        if ($statusCode == 200) {
-
-            print("status ".$statusCode);
-            $content = $response->getContent();
-            $content = json_decode($content);
-            $articles = $content->articles;
-            $totalResults = $content->totalResults;
-            $pages = ceil($totalResults/20);
-
-            $this->saveByCategory($articles, $categories[0]);
-        
-            $this->entityManager = $this->getDoctrine()->getManager();
-            $newsRepository = $this->entityManager->getRepository(News::class);
-            $news = $newsRepository->findByTitleDateCategory("title", "2020-04-02", "general");
-            $logger->info($news);
-            for($i=2;$i<=$pages;$i++) {
-                $content = $this->sendRequest($i);
+        $have_read = FALSE;
+        foreach($categories as $category) {
+            $httpClient = HttpClient::create();
+            $next_page = 1;
+            $response = $httpClient->request('GET', 'https://newsapi.org/v2/top-headlines?page='.$next_page.'&country=us&category='.$category.'&apiKey=d60756acb1ff49248d829c1635cca29e');
+            $statusCode = $response->getStatusCode();
+            if ($statusCode == 200) {
+                $have_read = TRUE;
+                $content = $response->getContent();
                 $content = json_decode($content);
                 $articles = $content->articles;
-                $this->saveByCategory($articles, $categories[0]);
-            }
+                $totalResults = $content->totalResults;
+                $pages = ceil($totalResults/20);
 
+                $this->saveByCategory($articles, $category);
+                $this->entityManager = $this->getDoctrine()->getManager();
+                $newsRepository = $this->entityManager->getRepository(News::class);
+                //$news = $newsRepository->findByTitleDateCategory("title", "2020-04-02", "general");
+                
+                for($i=2;$i<=$pages;$i++) {
+                    $content = $this->sendRequest($i,$category);
+                    $content = json_decode($content);
+                    $articles = $content->articles;
+                    $this->saveByCategory($articles, $category);
+                }
+            }
+           
+        }
+
+        if($have_read) {
             return new Response("OK", Response::HTTP_OK);
         }
         else {
             return new Response('Data not available', Response::HTTP_NOT_FOUND);
         }
+            
     }
 
     public function saveByCategory($articles , $category) {
         $len = count($articles);
+        $manager = $this->getDoctrine()->getManager();
         for($i=0;$i<$len;$i++) {
             $news = new News();
             $title = $articles[$i]->title;
@@ -80,7 +78,7 @@ class FetchDataController extends AbstractController {
             $url = $articles[$i]->url;
             $urlToImage = $articles[$i]->urlToImage;
             $publishedAt = new \DateTime($articles[$i]->publishedAt);
-                
+                    
             if ($title == NULL || $description == NULL || $url == NULL || $urlToImage==NULL || $publishedAt==NULL) {
                 continue;
             }
@@ -91,39 +89,33 @@ class FetchDataController extends AbstractController {
             $news->setUrlToImage($urlToImage);
             $news->setPublishedAt($publishedAt);
             $news->setCategory($category);
-            $manager = $this->getDoctrine()->getManager();
-            $manager->getConnection()->beginTransaction();
+                //$manager->getConnection()->beginTransaction();
             try {
                 $manager->persist($news);
-                $manager->flush();
-                $manager->getConnection()->commit();
+                 //$manager->getConnection()->commit();
             }
             catch (UniqueConstraintViolationException  $e){
-                $manager->getConnection()->rollBack();
-                $manager = $this->getDoctrine()->resetManager();
+                //$manager->getConnection()->rollBack();
+                   //$manager = $this->getDoctrine()->resetManager();
             }
-
+        }
+        try {
+           $manager->flush();
+           $manager->clear();
+        }
+        catch (UniqueConstraintViolationException  $e){
+            $manager = $this->getDoctrine()->resetManager();
         }
     }
-
-    /**
-     * @Route("/checkLoadingStatus", name="loading")
-     */
-
-     public function checkLoadingStatus() {
-        // check the mysql table to load new status , because sending requests for new data
-        // would make the fetching procedure freeze or override
-        
-     }
 
      public function isDataLoading() {
          // load from database either true or false
          return false;
      }
 
-    public function sendRequest($next_page) {
+    public function sendRequest($next_page, $category) {
         $httpClient = HttpClient::create();
-        $response = $httpClient->request('GET', 'https://newsapi.org/v2/top-headlines?page='.$next_page.'&country=us&category=general&apiKey=d60756acb1ff49248d829c1635cca29e');
+        $response = $httpClient->request('GET', 'https://newsapi.org/v2/top-headlines?page='.$next_page.'&country=us&category='.$category.'&apiKey=d60756acb1ff49248d829c1635cca29e');
 
         return $response->getContent();
 

@@ -51,16 +51,8 @@ class FetchDataController extends AbstractController {
             $totalResults = $content->totalResults;
             $pages = ceil($totalResults/20);
 
-            $len = count($articles);
-
-            
-    
-            //id, title, description, url, urlToImage, publishedAt
-
-            for($i=0;$i<$len;$i++) {
-                $this->saveByCategory($articles, $categories[0]);
-            }
-            // $title, $publishedAt, $category
+            $this->saveByCategory($articles, $categories[0]);
+        
             $this->entityManager = $this->getDoctrine()->getManager();
             $newsRepository = $this->entityManager->getRepository(News::class);
             $news = $newsRepository->findByTitleDateCategory("title", "2020-04-02", "general");
@@ -69,12 +61,7 @@ class FetchDataController extends AbstractController {
                 $content = $this->sendRequest($i);
                 $content = json_decode($content);
                 $articles = $content->articles;
-
-                $len = count($articles);
-                for ($j=0;$j<$len;$j++) {
-
-                }
-
+                $this->saveByCategory($articles, $categories[0]);
             }
 
             return new Response("OK", Response::HTTP_OK);

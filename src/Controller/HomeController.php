@@ -23,6 +23,7 @@ class HomeController extends AbstractController {
     {   
         $data = [];
         $this->getAllDates();
+        $this->getAllNewsByCategoryAndDate("general", "2020-04-06");
         return $this->render('index.html.twig', ["news" => $data]);
     }
 
@@ -107,6 +108,13 @@ class HomeController extends AbstractController {
         print_r($dates);
 
         return $dates;
+    }
+
+    public function getAllNewsByCategoryAndDate($category, $date) {
+        $this->entityManager = $this->getDoctrine()->getManager();
+        $newsRepository = $this->entityManager->getRepository(News::class);
+        $news = $newsRepository->findByCategoryAndDate($category, $date);
+        
     }
     
 

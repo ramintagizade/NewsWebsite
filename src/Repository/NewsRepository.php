@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\News;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-
+use App\Service\DateFormatFunction;
 /**
  * @method News|null find($id, $lockMode = null, $lockVersion = null)
  * @method News|null findOneBy(array $criteria, array $orderBy = null)
@@ -30,7 +30,18 @@ class NewsRepository extends ServiceEntityRepository
         ->getQuery()->getResult();
     }
 
-    
+    public function findByCategoryAndDate($category, $date) {
+        
+        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.title,n.description')
+        ->from("App\Entity\News","n")->where("n.category=:category")->andWhere("DATE_FORMAT(n.publishedAt, '%Y-%m-%d')=:date")
+        ->setParameters(array("category"=>$category,"date"=>$date))
+        ->getQuery()->getResult();
+
+        $len = count($results);
+        echo "len array" . $len;
+        return $results;
+    }
+
 
     public function findAll() {
         return [];

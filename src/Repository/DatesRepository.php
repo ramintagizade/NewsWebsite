@@ -31,7 +31,13 @@ class DatesRepository extends ServiceEntityRepository
         return false;
     }
 
-    
+    public function findAllDates() {
+        $results =  $this->getEntityManager()->createQueryBuilder('d')->select('d.date')
+        ->from("App\Entity\Dates","d")->getQuery()->getResult();
+
+        return $results;
+    }
+
 
 
     // /**

@@ -77,19 +77,9 @@ class FetchDataController extends AbstractController {
        
         $this->entityManager = $this->getDoctrine()->getManager();
         $dateRepository = $this->entityManager->getRepository(Dates::class);
-        $exists = $dateRepository->findDate("2020-04-06");
+        $exists = $dateRepository->findDate($date);
 
         return $exists;
-    }
-
-    public function sortDates() {
-        // this is just an example 
-        $arr = array('2011-01-02', '2011-02-01', '2011-03-02', '2011-02-04', '2011-01-07');    
-        function date_sort($a, $b) {
-            return strtotime($a) - strtotime($b);
-        }
-        usort($arr, "date_sort");
-        print_r($arr);
     }
 
     public function saveDate($date) {
@@ -119,6 +109,7 @@ class FetchDataController extends AbstractController {
     public function saveByCategory($articles , $category) {
         $len = count($articles);
         $manager = $this->getDoctrine()->getManager();
+        $save_dates = array();
         for($i=0;$i<$len;$i++) {
             $news = new News();
             $title = $articles[$i]->title;
@@ -138,8 +129,11 @@ class FetchDataController extends AbstractController {
             $news->setPublishedAt($publishedAt);
             $news->setCategory($category);
             $new_date = $publishedAt->format("Y-m-d");
-            $this->saveDate($new_date);
-
+            //if(!$this->isDateExists($new_date))
+            //    $this->saveDate($new_date);
+            if(!in_array($new_date, $save_dates)) {
+                array_push($save_dates, $new_date);
+            }
             try {
                 $manager->persist($news);
                  
@@ -172,6 +166,16 @@ class FetchDataController extends AbstractController {
             
         } catch (\Exception $e) {
             
+        }
+        
+        usort($save_dates, function ($a, $b) {
+            return strtotime($a) - strtotime($b);
+        });
+
+        $len = count($save_dates);
+        for($i=0;$i<$len;$i++) {
+            if(!$this->isDateExists($save_dates[$i]))
+               $this->saveDate($save_dates[$i]);
         }
     }
 

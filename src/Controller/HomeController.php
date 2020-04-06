@@ -11,19 +11,18 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\AbstractLogger;
 use Monolog\Logger;
 use App\Service\DataFetcher;
+use App\Entity\News;
+use App\Entity\Dates;
 
 class HomeController extends AbstractController {
 
      /**
      * @Route("/", name="index")
      */
-    
     public function index(Request $request) : Response
     {   
         $data = [];
-        $fetcher = new Logger("channel");
-        $fetcher->info("new message here ");
-        $time = date('H:i:s');
+        $this->getAllDates();
         return $this->render('index.html.twig', ["news" => $data]);
     }
 
@@ -85,25 +84,27 @@ class HomeController extends AbstractController {
         return $this->render("index.html.twig", ["news" => $data]);
     }
 
-    public function send_request($next_page) {
+    public function sortDates() {
+        // this is just an example 
+        $arr = array('2011-01-02', '2011-02-01', '2011-03-02', '2011-02-04', '2011-01-07');    
         
-        $httpClient = HttpClient::create();
-        $response = $httpClient->request('GET', 'https://newsapi.org/v2/top-headlines?page='.$next_page.'&country=us&category=general&apiKey=d60756acb1ff49248d829c1635cca29e');
-
-        $statusCode = $response->getStatusCode();
-       
-
-        if ($statusCode == 200) {
-
-            print("status ".$statusCode);
-            $content = $response->getContent();
-            $content = json_decode($content);
-            $articles = $content->articles;
-            return $articles;
-        }
-
-        return NULL;
+        usort($arr, function ($a, $b) {
+            return strtotime($a) - strtotime($b);
+        });
+        print_r($arr);
     }
+
+    public function getAllDates() {
+        $this->entityManager = $this->getDoctrine()->getManager();
+        $dateRepository = $this->entityManager->getRepository(Dates::class);
+        $dates = $dateRepository->findAllDates();
+        //echo implode(', ', $dates);
+        print_r($dates);
+        return $dates;
+    }
+    
+
+
 
 }
 

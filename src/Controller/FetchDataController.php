@@ -83,6 +83,30 @@ class FetchDataController extends AbstractController {
         return $exists;
     }
 
+    public function saveDate($date) {
+        $manager = $this->getDoctrine()->getManager();
+        $new_date = new Dates();
+        $new_date->setDate($date);
+
+        try {
+            $manager->persist($new_date);
+            $manager->flush();
+        }
+        catch (UniqueConstraintViolationException  $e){
+            $manager = $this->getDoctrine()->resetManager();
+        }
+        catch (\DBALException $e) {
+            
+        } catch (\PDOException $e) {
+           
+        } catch (\ORMException $e) {
+            
+        } catch (\Exception $e) {
+            
+        }
+
+    }
+
     public function saveByCategory($articles , $category) {
         $len = count($articles);
         $manager = $this->getDoctrine()->getManager();
@@ -104,14 +128,15 @@ class FetchDataController extends AbstractController {
             $news->setUrlToImage($urlToImage);
             $news->setPublishedAt($publishedAt);
             $news->setCategory($category);
-                //$manager->getConnection()->beginTransaction();
+            $new_date = $publishedAt->format("Y-m-d");
+            $this->saveDate($new_date);
+
             try {
                 $manager->persist($news);
-                 //$manager->getConnection()->commit();
+                 
             }
             catch (UniqueConstraintViolationException  $e){
-                //$manager->getConnection()->rollBack();
-                   //$manager = $this->getDoctrine()->resetManager();
+                
             }
             catch (\DBALException $e) {
                 

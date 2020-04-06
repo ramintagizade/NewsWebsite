@@ -24,7 +24,7 @@ class HomeController extends AbstractController {
         $fetcher = new Logger("channel");
         $fetcher->info("new message here ");
         $time = date('H:i:s');
-        return $this->render('general.html.twig', ["news" => $data]);
+        return $this->render('index.html.twig', ["news" => $data]);
     }
 
     /**

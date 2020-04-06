@@ -84,22 +84,28 @@ class HomeController extends AbstractController {
         return $this->render("index.html.twig", ["news" => $data]);
     }
 
-    public function sortDates() {
-        // this is just an example 
-        $arr = array('2011-01-02', '2011-02-01', '2011-03-02', '2011-02-04', '2011-01-07');    
-        
+    public function sortStrArray($arr) {
+
         usort($arr, function ($a, $b) {
             return strtotime($a) - strtotime($b);
         });
-        print_r($arr);
+        
+        return $arr;
     }
 
     public function getAllDates() {
         $this->entityManager = $this->getDoctrine()->getManager();
         $dateRepository = $this->entityManager->getRepository(Dates::class);
         $dates = $dateRepository->findAllDates();
-        //echo implode(', ', $dates);
+        $new_dates = array();
+        $len = count($dates);
+        for($i=0;$i<$len;$i++) {
+            array_push($new_dates, $dates[$i]["date"]);    
+        }
+        $dates = $new_dates;
+        $dates = $this->sortStrArray($dates);
         print_r($dates);
+
         return $dates;
     }
     

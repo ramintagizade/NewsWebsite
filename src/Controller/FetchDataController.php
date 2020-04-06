@@ -49,12 +49,14 @@ class FetchDataController extends AbstractController {
                 $newsRepository = $this->entityManager->getRepository(News::class);
                 //$news = $newsRepository->findByTitleDateCategory("title", "2020-04-02", "general");
                 
+                /* cut this data of , as we need first page of every news
                 for($i=2;$i<=$pages;$i++) {
                     $content = $this->sendRequest($i,$category);
                     $content = json_decode($content);
                     $articles = $content->articles;
                     $this->saveByCategory($articles, $category);
                 }
+                */
             }
            
         }

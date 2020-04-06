@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\News;
+use App\Entity\Dates;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
@@ -24,11 +25,13 @@ class FetchDataController extends AbstractController {
      */
     public function fetch() {
 
+        if ($this->isDateExists("2020-04-06")) {
+            return new Response('Data exists', Response::HTTP_NOT_FOUND);
+        }
+
         $logger = new Logger("FetchData");
         
-        if ($this->isDataLoading()) {
-            return new Response("InProgress", Response::HTTP_OK);  
-        }
+    
         $categories = ["general", "business", "entertainment","health","science","sports","technology"];
         $have_read = FALSE;
         foreach($categories as $category) {
@@ -68,6 +71,16 @@ class FetchDataController extends AbstractController {
             return new Response('Data not available', Response::HTTP_NOT_FOUND);
         }
             
+    }
+
+    public function isDateExists(string $date) {
+        // check given date with the date in the table, if not exists return false, else return true
+        $this->entityManager = $this->getDoctrine()->getManager();
+        $dateRepository = $this->entityManager->getRepository(Dates::class);
+        $exists = $dateRepository->findDate("2020-04-06");
+        echo "check date ". $exists;
+
+        return $exists;
     }
 
     public function saveByCategory($articles , $category) {
@@ -127,11 +140,6 @@ class FetchDataController extends AbstractController {
             
         }
     }
-
-     public function isDataLoading() {
-         // load from database either true or false
-         return false;
-     }
 
     public function sendRequest($next_page, $category) {
         $httpClient = HttpClient::create();

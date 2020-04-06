@@ -30,6 +30,8 @@ class NewsRepository extends ServiceEntityRepository
         ->getQuery()->getResult();
     }
 
+    
+
     public function findAll() {
         return [];
     }

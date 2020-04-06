@@ -24,7 +24,56 @@ class HomeController extends AbstractController {
         $fetcher = new Logger("channel");
         $fetcher->info("new message here ");
         $time = date('H:i:s');
-        return $this->render('index.html.twig', ["news" => $data]);
+        return $this->render('general.html.twig', ["news" => $data]);
+    }
+
+    /**
+     * @Route("/business", name="business")
+     */
+    public function business(Request $request) : Response {
+
+        $data = [];
+        return $this->render('business.html.twig', ["news" => $data]);
+    }
+
+    /**
+     * @Route("/entertainment" , name="entertainment")
+     */
+    public function entertainment(Request $request) : Response {
+        $data = [];
+        return $this->render('entertainment.html.twig', ["news" => $data]);
+    }
+
+    /**
+     * @Route("/health" , name = "health")
+     */
+    public function health(Request $request) : Response {
+        $data = [];
+        return $this->render("health.html.twig", ["news" => $data]);
+    }
+
+    /**
+     * @Route("/science", name = "science")
+     */
+    public function science(Request $request) : Response {
+        $data = [];
+        return $this->render("science.html.twig", ["news" => $data]);
+    }
+
+    /**
+     * @Route("/sports", name = "sports")
+     */
+    public function sports(Request $request) : Response {
+        $data = [];
+        return $this->render("sports.html.twig", ["news" => $data]);
+    }
+
+    /**
+     * @Route("/technology", name = "technology")
+     */
+    public function technology(Request $request) : Response {
+        $data = [];
+        return $this->render("technology.html.twig", ["news" => $data]);
     }
 
     /**

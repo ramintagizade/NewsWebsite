@@ -74,13 +74,22 @@ class FetchDataController extends AbstractController {
     }
 
     public function isDateExists(string $date) {
-        // check given date with the date in the table, if not exists return false, else return true
+       
         $this->entityManager = $this->getDoctrine()->getManager();
         $dateRepository = $this->entityManager->getRepository(Dates::class);
         $exists = $dateRepository->findDate("2020-04-06");
-        echo "check date ". $exists;
 
         return $exists;
+    }
+
+    public function sortDates() {
+        // this is just an example 
+        $arr = array('2011-01-02', '2011-02-01', '2011-03-02', '2011-02-04', '2011-01-07');    
+        function date_sort($a, $b) {
+            return strtotime($a) - strtotime($b);
+        }
+        usort($arr, "date_sort");
+        print_r($arr);
     }
 
     public function saveDate($date) {

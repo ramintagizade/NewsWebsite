@@ -10,9 +10,9 @@ use Symfony\Component\HttpClient\HttpClient;
 use Psr\Log\LoggerInterface;
 use Psr\Log\AbstractLogger;
 use Monolog\Logger;
-use App\Service\DataFetcher;
 use App\Entity\News;
 use App\Entity\Dates;
+use App\Service\HomeService;
 
 class HomeController extends AbstractController {
 
@@ -24,9 +24,11 @@ class HomeController extends AbstractController {
         $page = $request->query->get("page");
         $page = intval($page);
         
+        $homeService = HomeService();
+        echo $homeService->getHomeData();
         $data = [];
-        $this->getAllDates();
-        $this->getAllNewsByCategoryAndDate("general", "2020-04-06");
+        //$this->getAllDates();
+        //$this->getAllNewsByCategoryAndDate("general", "2020-04-06");
         return $this->render('index.html.twig', ["news" => $data]);
     }
 

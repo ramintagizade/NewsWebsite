@@ -10,7 +10,6 @@ use Symfony\Component\HttpClient\HttpClient;
 use Psr\Log\LoggerInterface;
 use Psr\Log\AbstractLogger;
 use Monolog\Logger;
-use App\Service\DataFetcher;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;

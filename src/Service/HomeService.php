@@ -12,8 +12,12 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class HomeService {
 
-    public function getHomeData() {
+    public function __construct(){
 
+    }
+
+    public function getHomeData() {
+        return "data";
     }
 }
 

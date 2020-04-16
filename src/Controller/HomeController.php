@@ -21,6 +21,9 @@ class HomeController extends AbstractController {
      */
     public function index(Request $request) : Response
     {   
+        $page = $request->query->get("page");
+        $page = intval($page);
+        
         $data = [];
         $this->getAllDates();
         $this->getAllNewsByCategoryAndDate("general", "2020-04-06");

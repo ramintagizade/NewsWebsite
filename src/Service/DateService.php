@@ -9,9 +9,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class DateService {
 
-    public function __construct() {
 
-    }
 
     public function getAllDates() {
         $this->entityManager = $this->getDoctrine()->getManager();
@@ -27,6 +25,15 @@ class DateService {
         print_r($dates);
 
         return $dates;
+    }
+
+    public function sortStrArray($arr) {
+
+        usort($arr, function ($a, $b) {
+            return strtotime($a) - strtotime($b);
+        });
+        
+        return $arr;
     }
 
 

@@ -13,6 +13,9 @@ use Monolog\Logger;
 use App\Entity\News;
 use App\Entity\Dates;
 use App\Service\HomeService;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityManagerInterface;
 
 class HomeController extends AbstractController {
 
@@ -23,10 +26,10 @@ class HomeController extends AbstractController {
     {   
         $page = $request->query->get("page");
         $page = intval($page);
-        
-        $homeService = HomeService();
-        echo $homeService->getHomeData();
-        $data = [];
+        $em = $this->getDoctrine()->getManager();
+        $homeService = new HomeService($em);
+        $data = $homeService->getHomeNews($page);
+
         //$this->getAllDates();
         //$this->getAllNewsByCategoryAndDate("general", "2020-04-06");
         return $this->render('index.html.twig', ["news" => $data]);
@@ -96,15 +99,6 @@ class HomeController extends AbstractController {
 
         $data = [];
         return $this->render("technology.html.twig", ["news" => $data]);
-    }
-
-    public function sortStrArray($arr) {
-
-        usort($arr, function ($a, $b) {
-            return strtotime($a) - strtotime($b);
-        });
-        
-        return $arr;
     }
 
 }

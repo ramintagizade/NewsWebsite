@@ -2,22 +2,29 @@
 namespace App\Service;
 
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\EntityManagerInterface;
+//use Doctrine\ORM\EntityRepository;
+//use Doctrine\ORM\Mapping as ORM;
+//use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\News;
 use App\Entity\Dates;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use App\Service\NewsService;
+use App\Service\DateService;
+
 
 class HomeService {
 
-    public function __construct(){
+    private $entityManager;
 
+    public function __construct($em){
+        $this->entityManager = $em;
     }
 
-    public function getHomeData() {
-        return "data";
+    public function getHomeNews($page) {
+       $newsService = new NewsService($this->entityManager);
+       $homeNews = $newsService->getAllNewsByCategoryAndDate("general","06-06-2020");
+       return $homeNews;
     }
 }
 

@@ -25,9 +25,7 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-
-    App\Service\DataFetcher:
-         $logger: '@monolog.logger.request'
+        
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
      

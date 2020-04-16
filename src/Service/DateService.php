@@ -5,12 +5,12 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Dates;
-
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class DateService {
 
     public function __construct() {
-        
+
     }
 
     public function getAllDates() {

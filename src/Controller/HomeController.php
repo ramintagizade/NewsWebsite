@@ -34,6 +34,8 @@ class HomeController extends AbstractController {
      * @Route("/business", name="business")
      */
     public function business(Request $request) : Response {
+        $page = $request->query->get("page");
+        $page = intval($page);
 
         $data = [];
         return $this->render('business.html.twig', ["news" => $data]);
@@ -43,6 +45,9 @@ class HomeController extends AbstractController {
      * @Route("/entertainment" , name="entertainment")
      */
     public function entertainment(Request $request) : Response {
+        $page = $request->query->get("page");
+        $page = intval($page);
+
         $data = [];
         return $this->render('entertainment.html.twig', ["news" => $data]);
     }
@@ -51,6 +56,9 @@ class HomeController extends AbstractController {
      * @Route("/health" , name = "health")
      */
     public function health(Request $request) : Response {
+        $page = $request->query->get("page");
+        $page = intval($page);
+
         $data = [];
         return $this->render("health.html.twig", ["news" => $data]);
     }
@@ -59,6 +67,9 @@ class HomeController extends AbstractController {
      * @Route("/science", name = "science")
      */
     public function science(Request $request) : Response {
+        $page = $request->query->get("page");
+        $page = intval($page);
+
         $data = [];
         return $this->render("science.html.twig", ["news" => $data]);
     }
@@ -67,6 +78,9 @@ class HomeController extends AbstractController {
      * @Route("/sports", name = "sports")
      */
     public function sports(Request $request) : Response {
+        $page = $request->query->get("page");
+        $page = intval($page);
+
         $data = [];
         return $this->render("sports.html.twig", ["news" => $data]);
     }
@@ -75,17 +89,11 @@ class HomeController extends AbstractController {
      * @Route("/technology", name = "technology")
      */
     public function technology(Request $request) : Response {
+        $page = $request->query->get("page");
+        $page = intval($page);
+
         $data = [];
         return $this->render("technology.html.twig", ["news" => $data]);
-    }
-
-    /**
-     * @Route("/page/{next_page}" , name="page" )
-     */
-    public function page($next_page) {
-        
-        $data = $this->send_request($next_page);
-        return $this->render("index.html.twig", ["news" => $data]);
     }
 
     public function sortStrArray($arr) {

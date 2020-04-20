@@ -13,6 +13,7 @@ use Monolog\Logger;
 use App\Entity\News;
 use App\Entity\Dates;
 use App\Service\HomeService;
+use App\Service\BusinessService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,7 +42,10 @@ class IndexController extends AbstractController {
         $page = $request->query->get("page");
         $page = intval($page);
 
-        $data = [];
+        $em = $this->getDoctrine()->getManager();
+        $businessService = new BusinessService($em);
+        $data = $businessService->getHomeNews($page);
+
         return $this->render('business.html.twig', ["news" => $data]);
     }
 

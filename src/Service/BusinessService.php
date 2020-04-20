@@ -14,7 +14,7 @@ class BusinessService {
         $this->entityManager = $em;
     }
 
-    public function getHomeNews($page) {
+    public function getBusinessNews($page) {
        $newsService = new NewsService($this->entityManager);
        $businessNews = $newsService->getAllNewsByCategoryAndDate("business","2020-04-06");
        return $businessNews;

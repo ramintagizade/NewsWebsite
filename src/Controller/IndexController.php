@@ -17,7 +17,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
 
-class HomeController extends AbstractController {
+class IndexController extends AbstractController {
 
      /**
      * @Route("/", name="index")

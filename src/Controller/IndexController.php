@@ -35,7 +35,6 @@ class IndexController extends AbstractController {
         $em = $this->getDoctrine()->getManager();
         $homeService = new HomeService($em);
         $data = $homeService->getHomeNews($page);
-        //echo json_encode($data[0]);
 
         return $this->render('index.html.twig', ["news" => $data]);
     }
@@ -117,6 +116,16 @@ class IndexController extends AbstractController {
         $technologyService = new TechnologyService($em);
         $data = $technologyService->getTechnologyNews($page);
         return $this->render("technology.html.twig", ["news" => $data]);
+    }
+
+    /**
+     * @Route("/search" , name="search")
+     */
+    public function search(Request $request) : Response {
+        $page = $request->query->get("page");
+        $page = intval($page);
+        $data = [];
+        return $this->render("search.html.twig", ["news" => $data]);
     }
 
 }

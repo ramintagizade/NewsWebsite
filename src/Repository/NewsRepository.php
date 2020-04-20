@@ -38,7 +38,7 @@ class NewsRepository extends ServiceEntityRepository
         ->getQuery()->getResult();
 
         $len = count($results);
-        echo "len array" . $len;
+        //echo "len array" . $len;
         return $results;
     }
 

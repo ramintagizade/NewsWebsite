@@ -15,6 +15,7 @@ use App\Entity\Dates;
 use App\Service\HomeService;
 use App\Service\BusinessService;
 use App\Service\EntertainmentService;
+use App\Service\HealthService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
@@ -70,7 +71,9 @@ class IndexController extends AbstractController {
         $page = $request->query->get("page");
         $page = intval($page);
 
-        $data = [];
+        $em = $this->getDoctrine()->getManager();
+        $healthService = new HealthService($em);
+        $data = $healthService->getHealthNews($page);
         return $this->render("health.html.twig", ["news" => $data]);
     }
 

@@ -29,9 +29,8 @@ class IndexController extends AbstractController {
         $em = $this->getDoctrine()->getManager();
         $homeService = new HomeService($em);
         $data = $homeService->getHomeNews($page);
+        //echo json_encode($data[0]);
 
-        //$this->getAllDates();
-        //$this->getAllNewsByCategoryAndDate("general", "2020-04-06");
         return $this->render('index.html.twig', ["news" => $data]);
     }
 

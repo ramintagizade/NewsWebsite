@@ -32,7 +32,7 @@ class NewsRepository extends ServiceEntityRepository
 
     public function findByCategoryAndDate($category, $date) {
         
-        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.title,n.description')
+        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.title,n.description,n.urlToImage')
         ->from("App\Entity\News","n")->where("n.category=:category")->andWhere("DATE_FORMAT(n.publishedAt, '%Y-%m-%d')=:date")
         ->setParameters(array("category"=>$category,"date"=>$date))
         ->getQuery()->getResult();

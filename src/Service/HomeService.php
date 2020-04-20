@@ -23,7 +23,7 @@ class HomeService {
 
     public function getHomeNews($page) {
        $newsService = new NewsService($this->entityManager);
-       $homeNews = $newsService->getAllNewsByCategoryAndDate("general","06-06-2020");
+       $homeNews = $newsService->getAllNewsByCategoryAndDate("general","2020-04-06");
        return $homeNews;
     }
 }

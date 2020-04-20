@@ -16,6 +16,7 @@ use App\Service\HomeService;
 use App\Service\BusinessService;
 use App\Service\EntertainmentService;
 use App\Service\HealthService;
+use App\Service\ScienceService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
@@ -84,7 +85,9 @@ class IndexController extends AbstractController {
         $page = $request->query->get("page");
         $page = intval($page);
 
-        $data = [];
+        $em = $this->getDoctrine()->getManager();
+        $scienceService = new ScienceService($em);
+        $data = $scienceService->getScienceNews($page);
         return $this->render("science.html.twig", ["news" => $data]);
     }
 

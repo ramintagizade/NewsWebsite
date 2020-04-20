@@ -49,12 +49,14 @@
 <body> 
 
     <div class="container">
-        <div style="flex-direction: column; padding-bottom: 586px; padding-top: 0px;">
+        <div style="flex-direction: column; padding-bottom: 0px; padding-top: 0px;">
             {% for data in news %}
 
-                <div class="news-content" style="position:relative;width:33%;float:left;margin-bottom:10px;"> 
+                <div class="news-content" style="margin-left:5%;position:relative;width:40%;float:left;margin-bottom:0px;display: block;"> 
                         {{data.title}}
+                       
                       <img src='{{data.urlToImage}}' style="max-height:100%; max-width:100%;">
+                     
                 </div>
             {% endfor %}
         </div>

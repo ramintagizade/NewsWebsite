@@ -25,6 +25,13 @@ class NewsService  {
         
         return $news;
     }
+
+    public function getAllNewsByDescriptionQuery($query) {
+        $newsRepository = $this->entityManager->getRepository(News::class);
+        $news = $newsRepository->findAllNewsByDescriptionQuery($query);
+
+        return $news;
+    }
 }
 
 

@@ -42,6 +42,15 @@ class NewsRepository extends ServiceEntityRepository
         return $results;
     }
 
+    public function findAllNewsByDescriptionQuery($query) {
+       
+        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.title,n.description,n.urlToImage')
+        ->from("App\Entity\News","n")->where("n.description LIKE :query")->setParameters(array("query"=>"%".$query."%"))
+        ->getQuery()->getResult();
+
+        return $results;
+    }
+
 
     public function findAll() {
         return [];

@@ -19,6 +19,7 @@ use App\Service\HealthService;
 use App\Service\ScienceService;
 use App\Service\SportsService;
 use App\Service\TechnologyService;
+use App\Service\SearchService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
@@ -124,7 +125,11 @@ class IndexController extends AbstractController {
     public function search(Request $request) : Response {
         $page = $request->query->get("page");
         $page = intval($page);
-        $data = [];
+        $query = $request->query->get("q");
+
+        $em = $this->getDoctrine()->getManager();
+        $searchService = new SearchService($em);
+        $data = $searchService->getSearchNews($page,$query);
         return $this->render("search.html.twig", ["news" => $data]);
     }
 

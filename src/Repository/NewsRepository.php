@@ -53,7 +53,7 @@ class NewsRepository extends ServiceEntityRepository
 
     public function findNewsByIdTitle($id, $date) {
 
-        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.id,n.title,n.description,n.publishedAt,n.urlToImage')
+        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.id,n.title,n.description,n.publishedAt,n.urlToImage,n.url')
         ->from("App\Entity\News","n")->where("n.id=:id")->andWhere("DATE_FORMAT(n.publishedAt, '%Y-%m-%d')=:date")->setParameters(array("id"=>$id,"date"=>$date))
         ->getQuery()->getResult();
 

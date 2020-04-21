@@ -33,9 +33,9 @@ class NewsService  {
         return $news;
     }
 
-    public function getNewsByIdTitle($id, $title){
+    public function getNewsByIdTitle($id, $date){
         $newsRepository = $this->entityManager->getRepository(News::class);
-        $news = $newsRepository->findNewsByIdTitle($id,$title);
+        $news = $newsRepository->findNewsByIdTitle($id,$date);
         return $news;
     }
 }

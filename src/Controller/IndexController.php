@@ -135,13 +135,13 @@ class IndexController extends AbstractController {
     }
 
     /**
-     * @Route("/news/{id}/{title}")
+     * @Route("/news/{id}/{date}")
      */
-    public function news_each(Request $request, $id, $title) :Response {
+    public function news_each(Request $request, $id, $date) :Response {
         
         $em = $this->getDoctrine()->getManager();
         $newsService = new NewsService($em);
-        $data = $newsService->getNewsByIdTitle($id,$title);
+        $data = $newsService->getNewsByIdTitle($id,$date);
         return $this->render("news.html.twig", ["news" => $data]);
     }
 

@@ -32,7 +32,7 @@ class NewsRepository extends ServiceEntityRepository
 
     public function findByCategoryAndDate($category, $date) {
         
-        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.title,n.description,n.urlToImage')
+        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.id,n.title,n.description,n.urlToImage')
         ->from("App\Entity\News","n")->where("n.category=:category")->andWhere("DATE_FORMAT(n.publishedAt, '%Y-%m-%d')=:date")
         ->setParameters(array("category"=>$category,"date"=>$date))
         ->getQuery()->getResult();
@@ -44,8 +44,17 @@ class NewsRepository extends ServiceEntityRepository
 
     public function findAllNewsByDescriptionQuery($query) {
        
-        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.title,n.description,n.urlToImage')
+        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.id,n.title,n.description,n.urlToImage')
         ->from("App\Entity\News","n")->where("n.description LIKE :query")->setParameters(array("query"=>"%".$query."%"))
+        ->getQuery()->getResult();
+
+        return $results;
+    }
+
+    public function findNewsByIdTitle($id, $title) {
+
+        $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.id,n.title,n.description,n.urlToImage')
+        ->from("App\Entity\News","n")->where("n.id=:id")->andWhere("n.title=:title")->setParameters(array("id"=>$id,"title"=>$title))
         ->getQuery()->getResult();
 
         return $results;

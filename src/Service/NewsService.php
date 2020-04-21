@@ -32,6 +32,12 @@ class NewsService  {
 
         return $news;
     }
+
+    public function getNewsByIdTitle($id, $title){
+        $newsRepository = $this->entityManager->getRepository(News::class);
+        $news = $newsRepository->findNewsByIdTitle($id,$title);
+        return $news;
+    }
 }
 
 

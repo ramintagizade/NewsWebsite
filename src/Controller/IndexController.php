@@ -20,6 +20,7 @@ use App\Service\ScienceService;
 use App\Service\SportsService;
 use App\Service\TechnologyService;
 use App\Service\SearchService;
+use App\Service\NewsService;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
@@ -131,6 +132,17 @@ class IndexController extends AbstractController {
         $searchService = new SearchService($em);
         $data = $searchService->getSearchNews($page,$query);
         return $this->render("search.html.twig", ["news" => $data]);
+    }
+
+    /**
+     * @Route("/news/{id}/{title}")
+     */
+    public function news_each(Request $request, $id, $title) :Response {
+        
+        $em = $this->getDoctrine()->getManager();
+        $newsService = new NewsService($em);
+        $data = $newsService->getNewsByIdTitle($id,$title);
+        return $this->render("news.html.twig", ["news" => $data]);
     }
 
 }

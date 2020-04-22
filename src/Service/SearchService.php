@@ -16,7 +16,7 @@ class SearchService {
 
     public function getSearchNews($page, $query) {
        $newsService = new NewsService($this->entityManager);
-       $searchNews = $newsService->getAllNewsByDescriptionQuery($query);
+       $searchNews = $newsService->getAllNewsByDescriptionQuery($page,$query);
        return $searchNews;
     }
 

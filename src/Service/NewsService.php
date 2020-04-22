@@ -39,10 +39,10 @@ class NewsService  {
     
 
 
-    public function getAllNewsByDescriptionQuery($query) {
+    public function getAllNewsByDescriptionQuery($page,$query) {
         $newsRepository = $this->entityManager->getRepository(News::class);
-        $news = $newsRepository->findAllNewsByDescriptionQuery($query);
-
+        $news = $newsRepository->findAllNewsByDescriptionQuery($page,$query);
+        
         return $news;
     }
 

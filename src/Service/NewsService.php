@@ -24,14 +24,6 @@ class NewsService  {
         $newsRepository = $this->entityManager->getRepository(News::class);
         $dateService = new DateService($this->entityManager);
         $dates = $dateService->getAllDates();
-        $len = count($dates);
-
-        if($page > $len-1) {
-            $page = $len-1;
-        }
-        
-        echo "getting for the date of ".$dates[$page];
-
         $news = $newsRepository->findByCategoryAndDate($category, $dates[$page]);
          
         return $news;

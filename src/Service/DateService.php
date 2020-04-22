@@ -16,7 +16,7 @@ class DateService {
     }
 
     public function getAllDates() {
-       
+        
         $dateRepository = $this->entityManager->getRepository(Dates::class);
         $dates = $dateRepository->findAllDates();
         $new_dates = array();
@@ -26,15 +26,14 @@ class DateService {
         }
         $dates = $new_dates;
         $dates = $this->sortStrArray($dates);
-        print_r($dates);
-
+        
         return $dates;
     }
 
     public function sortStrArray($arr) {
 
         usort($arr, function ($a, $b) {
-            return strtotime($a) - strtotime($b);
+            return strtotime($b) - strtotime($a);
         });
         
         return $arr;

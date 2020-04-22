@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-//use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 
 class NewsService  {
 
@@ -19,15 +19,21 @@ class NewsService  {
         $this->entityManager = $em;
     }
 
-    public function getAllNewsByCategoryAndDate($category, $date) {
-    
+    public function getAllNewsByCategoryAndDate($page, $category) {
+        
+        $newsRepository = $this->entityManager->getRepository(News::class);
         $dateService = new DateService($this->entityManager);
         $dates = $dateService->getAllDates();
-        echo count($dates);
+        $len = count($dates);
 
-        $newsRepository = $this->entityManager->getRepository(News::class);
-        $news = $newsRepository->findByCategoryAndDate($category, $date);
+        if($page > $len-1) {
+            $page = $len-1;
+        }
         
+        echo "getting for the date of ".$dates[$page];
+
+        $news = $newsRepository->findByCategoryAndDate($category, $dates[$page]);
+         
         return $news;
     }
     

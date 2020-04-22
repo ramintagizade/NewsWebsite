@@ -16,7 +16,7 @@ class HealthService {
 
     public function getHealthNews($page) {
        $newsService = new NewsService($this->entityManager);
-       $healthNews = $newsService->getAllNewsByCategoryAndDate("health","2020-04-06");
+       $healthNews = $newsService->getAllNewsByCategoryAndDate($page,"health");
        return $healthNews;
     }
 

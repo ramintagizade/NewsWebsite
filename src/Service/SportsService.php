@@ -16,7 +16,7 @@ class SportsService {
 
     public function getSportsNews($page) {
        $newsService = new NewsService($this->entityManager);
-       $sportsNews = $newsService->getAllNewsByCategoryAndDate("sports","2020-04-06");
+       $sportsNews = $newsService->getAllNewsByCategoryAndDate($page,"sports");
        return $sportsNews;
     }
 

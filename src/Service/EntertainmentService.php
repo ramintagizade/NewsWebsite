@@ -16,7 +16,7 @@ class EntertainmentService {
 
     public function getEntertainmentNews($page) {
        $newsService = new NewsService($this->entityManager);
-       $entertainmentNews = $newsService->getAllNewsByCategoryAndDate("entertainment","2020-04-06");
+       $entertainmentNews = $newsService->getAllNewsByCategoryAndDate($page,"entertainment");
        return $entertainmentNews;
     }
 

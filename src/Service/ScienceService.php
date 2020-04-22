@@ -16,7 +16,7 @@ class ScienceService {
 
     public function getScienceNews($page) {
        $newsService = new NewsService($this->entityManager);
-       $scienceNews = $newsService->getAllNewsByCategoryAndDate("science","2020-04-04");
+       $scienceNews = $newsService->getAllNewsByCategoryAndDate($page, "science");
        return $scienceNews;
     }
 

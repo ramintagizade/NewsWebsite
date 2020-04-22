@@ -19,15 +19,6 @@ class DateService {
         
         $dateRepository = $this->entityManager->getRepository(Dates::class);
         $dates = $dateRepository->findAllDates();
-        /*$new_dates = array();
-        print_r($dates);    
-        $len = count($dates);
-        for($i=0;$i<$len;$i++) {
-            array_push($new_dates, $dates[$i]["date"]);    
-        }
-        $dates = $new_dates;
-        $dates = $this->sortStrArray($dates);
-        */
         return $dates;
     }
 

@@ -17,19 +17,27 @@ use App\Entity\News;
 use App\Entity\Dates;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use App\Service\DateFormatFunction;
 
 class FetchDataController extends AbstractController {
+    
+    private $log;
+    
+    public function __construct() {
+        $this->log = new Logger("FetchDataController");
+    }
+
     /**
      * @Route("/fetchData" , name="fetch")
      */
     public function fetch() {
+        
+        $current_date  = new \DateTime();
+        $current_date = DATE_FORMAT($current_date, 'Y-m-d');
 
-        if ($this->isDateExists("2020-04-06")) {
+        if ($this->isDateExists($current_date)) {
             return new Response('Data exists', Response::HTTP_NOT_FOUND);
         }
-
-        $logger = new Logger("FetchData");
-        
     
         $categories = ["general", "business", "entertainment","health","science","sports","technology"];
         $have_read = FALSE;
@@ -116,7 +124,9 @@ class FetchDataController extends AbstractController {
             $url = $articles[$i]->url;
             $urlToImage = $articles[$i]->urlToImage;
             $publishedAt = new \DateTime($articles[$i]->publishedAt);
-                    
+            $new_date = $publishedAt->format("Y-m-d");
+            $publishedAt = new \DateTime($new_date);
+           
             if ($title == NULL || $description == NULL || $url == NULL || $urlToImage==NULL || $publishedAt==NULL) {
                 continue;
             }
@@ -127,27 +137,29 @@ class FetchDataController extends AbstractController {
             $news->setUrlToImage($urlToImage);
             $news->setPublishedAt($publishedAt);
             $news->setCategory($category);
-            $new_date = $publishedAt->format("Y-m-d");
-            //if(!$this->isDateExists($new_date))
-            //    $this->saveDate($new_date);
+            
             if(!in_array($new_date, $save_dates)) {
                 array_push($save_dates, $new_date);
             }
             try {
                 $manager->persist($news);
-                 
             }
             catch (UniqueConstraintViolationException  $e){
-                
+                $this->log->info($e);
+                $manager = $this->getDoctrine()->resetManager();
             }
             catch (\DBALException $e) {
-                
+                $this->log->info($e);
+                $manager = $this->getDoctrine()->resetManager();
             } catch (\PDOException $e) {
-               
+                $this->log->info($e);
+                $manager = $this->getDoctrine()->resetManager();
             } catch (\ORMException $e) {
-                
+                $this->log->info($e);
+                $manager = $this->getDoctrine()->resetManager();
             } catch (\Exception $e) {
-                
+                $this->log->info($e);
+                $manager = $this->getDoctrine()->resetManager();
             }
         }
         try {
@@ -155,16 +167,21 @@ class FetchDataController extends AbstractController {
            $manager->clear();
         }
         catch (UniqueConstraintViolationException  $e){
+            $this->log->info($e);
             $manager = $this->getDoctrine()->resetManager();
         }
         catch (\DBALException $e) {
-                
+            $this->log->info($e);
+            $manager = $this->getDoctrine()->resetManager();    
         } catch (\PDOException $e) {
-           
+            $this->log->info($e);
+            $manager = $this->getDoctrine()->resetManager();
         } catch (\ORMException $e) {
-            
+            $this->log->info($e);
+            $manager = $this->getDoctrine()->resetManager();
         } catch (\Exception $e) {
-            
+            $this->log->info($e);
+            $manager = $this->getDoctrine()->resetManager();
         }
         
         usort($save_dates, function ($a, $b) {

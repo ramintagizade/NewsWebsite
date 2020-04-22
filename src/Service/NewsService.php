@@ -23,8 +23,7 @@ class NewsService  {
         
         $newsRepository = $this->entityManager->getRepository(News::class);
         $dateService = new DateService($this->entityManager);
-        $dates = $dateService->getAllDates();
-        $news = $newsRepository->findByCategoryAndDate($category, $dates[$page]);
+        $news = $newsRepository->findByCategoryAndDate($category,$page);
          
         return $news;
     }

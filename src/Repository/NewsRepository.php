@@ -30,15 +30,13 @@ class NewsRepository extends ServiceEntityRepository
         ->getQuery()->getResult();
     }
 
-    public function findByCategoryAndDate($category, $date) {
+    public function findByCategoryAndDate($category,$page) {
         
         $results = $this->getEntityManager()->createQueryBuilder('n')->select('n.id,n.title,n.description,n.publishedAt,n.urlToImage')
-        ->from("App\Entity\News","n")->where("n.category=:category")->andWhere("DATE_FORMAT(n.publishedAt, '%Y-%m-%d')=:date")
-        ->setParameters(array("category"=>$category,"date"=>$date))
-        ->getQuery()->getResult();
+        ->from("App\Entity\News","n")->where("n.category=:category")//->andWhere("DATE_FORMAT(n.publishedAt, '%Y-%m-%d')=:date")
+        ->orderBy('n.publishedAt','DESC')->setParameters(array("category"=>$category))
+        ->setFirstResult($page*20)->setMaxResults(20)->getQuery()->getResult();
 
-        $len = count($results);
-        //echo "len array" . $len;
         return $results;
     }
 

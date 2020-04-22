@@ -9,10 +9,14 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class DateService {
 
+    private $entityManager;
 
+    public function __construct($em)  {
+        $this->entityManager = $em;
+    }
 
     public function getAllDates() {
-        $this->entityManager = $this->getDoctrine()->getManager();
+       
         $dateRepository = $this->entityManager->getRepository(Dates::class);
         $dates = $dateRepository->findAllDates();
         $new_dates = array();

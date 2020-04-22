@@ -1,7 +1,7 @@
 <?php
 namespace App\Service;
 
-
+use App\Service\DateService;
 use App\Entity\News;
 use App\Entity\Dates;
 use Doctrine\ORM\EntityRepository;
@@ -20,11 +20,18 @@ class NewsService  {
     }
 
     public function getAllNewsByCategoryAndDate($category, $date) {
+    
+        $dateService = new DateService($this->entityManager);
+        $dates = $dateService->getAllDates();
+        echo count($dates);
+
         $newsRepository = $this->entityManager->getRepository(News::class);
         $news = $newsRepository->findByCategoryAndDate($category, $date);
         
         return $news;
     }
+    
+
 
     public function getAllNewsByDescriptionQuery($query) {
         $newsRepository = $this->entityManager->getRepository(News::class);

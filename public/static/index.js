@@ -23,6 +23,7 @@ document.getElementById("next_page").addEventListener("click",function(){
 
 
 window.addEventListener("load", function(){
+    
     var page = window.location.href.split("page=")[1];
     if (page==undefined) {
         page = 0;
@@ -55,4 +56,3 @@ document.getElementById("previous_page").addEventListener("click",function(){
         }
     }
 })
-

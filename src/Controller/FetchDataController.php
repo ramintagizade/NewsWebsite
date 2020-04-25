@@ -126,8 +126,10 @@ class FetchDataController extends AbstractController {
             $publishedAt = new \DateTime($articles[$i]->publishedAt);
             $new_date = $publishedAt->format("Y-m-d");
             $publishedAt = new \DateTime($new_date);
-           
-            if ($title == NULL || $description == NULL || $url == NULL || $urlToImage==NULL || $publishedAt==NULL) {
+            if ($urlToImage == NULL) {
+                $urlToImage = "static/image.png";
+            }
+            if ($title == NULL || $description == NULL || $url == NULL || $publishedAt==NULL) {
                 continue;
             }
 

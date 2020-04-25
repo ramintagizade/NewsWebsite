@@ -55,7 +55,11 @@
                 <div class="news-content" style="margin-left:5%;position:relative;width:60%;float:left;margin-bottom:0px;display: block;"> 
                         {{data.description}}
                        
-                      <img src='{{data.urlToImage}}' style="max-height:100%; max-width:100%;">
+                       {% if '{{data.urlToImage}}' starts with 'static/' %} 
+                        <img src='{{ asset('static/image.png') }}' style="max-height:100%; max-width:100%;">
+                      {% else %}
+                        <img src='{{data.urlToImage}}' style="max-height:100%; max-width:100%;">
+                      {% endif %}
                       
                       <a href="{{data.url}}"> 
                         👓 View full article

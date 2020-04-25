@@ -57,7 +57,11 @@
                         {{data.title}}
                        
                       <a href="/news/{{data.id}}/{{data.publishedAt|date("Y-m-d")}}">
-                      <img src='{{data.urlToImage}}' style="max-height:100%; max-width:100%;">
+                      {% if '{{data.urlToImage}}' starts with 'static/' %} 
+                        <img src='{{ asset('static/image.png') }}' style="max-height:100%; max-width:100%;">
+                      {% else %}
+                        <img src='{{data.urlToImage}}' style="max-height:100%; max-width:100%;">
+                      {% endif %}
                      </a>
                      
                 </div>

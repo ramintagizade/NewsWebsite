@@ -56,7 +56,7 @@
                         {{data.description}}
                         
                         {% set asset_base = '../../' %}
-                        {% set url_len = data.urlToImage|length  %}
+                        {% set url_len = data.urlToImage|length|number_format  %}
                        {% if url_len < 20 %}
                         <img src='{{ asset_base }}{{ asset(data.urlToImage) }}' style="max-height:100%; max-width:100%;" >
                         {% else %}

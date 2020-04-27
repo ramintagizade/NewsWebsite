@@ -54,13 +54,16 @@
 
                 <div class="news-content" style="margin-left:5%;position:relative;width:60%;float:left;margin-bottom:0px;display: block;"> 
                         {{data.description}}
-                       
-                       {% if '{{data.urlToImage}}' starts with 'static/' %} 
-                        <img src='{{ asset('static/image.png') }}' style="max-height:100%; max-width:100%;">
-                      {% else %}
-                        <img src='{{data.urlToImage}}' style="max-height:100%; max-width:100%;">
-                      {% endif %}
-                      
+                        
+                        {% set asset_base = '../../' %}
+                        {% set url_len = data.urlToImage|length  %}
+                       {% if url_len < 20 %}
+                        <img src='{{ asset_base }}{{ asset(data.urlToImage) }}' style="max-height:100%; max-width:100%;" >
+                        {% else %}
+                        <img src='{{data.urlToImage}}' style="max-height:100%; max-width:100%;" >
+                       {% endif %}
+
+                      <p> </p> 
                       <a href="{{data.url}}"> 
                         👓 View full article
                       </a>
@@ -69,8 +72,6 @@
         </div>
     </div>
 
-
-    <script src="{{ asset('static/index.js') }}" type="text/javascript"></script>
 </body>
 
 </html>
